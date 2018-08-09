@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 2.7)
+
+project(SocketCAN_MacOS)
+
+file(GLOB SRC *.c)
+file(GLOB SRC_X_CAN x/can/*.c)
+file(GLOB INC_X_CAN x/can)
+file(GLOB INC_X_CAN_LIB x/can/lib)
+
+include_directories(
+	${INC_X_CAN}, 
+	${INC_X_CAN_LIB}
+)
+
+add_executable(out canxsend.c ${SRC_X_CAN})

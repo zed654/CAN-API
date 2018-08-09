@@ -1,0 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
+project(socketcan_cpp)
+include_directories(include/)
+ADD_EXECUTABLE( main_tx src/main_TX.cpp include/can_linux_val.h)
+ADD_EXECUTABLE( main_rx src/main_RX.cpp include/can_linux_val.h)
