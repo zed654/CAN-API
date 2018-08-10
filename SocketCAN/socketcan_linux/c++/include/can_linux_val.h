@@ -34,8 +34,25 @@ public:
     CAN_AVL(const char *dev_name_);
     void CAN_INIT(const char *dev_name_);
     void write_param(int id_, int dlc_);
+    ssize_t write();
+    ssize_t read();
 };
 
+ssize_t CAN_VAL::write()
+{
+    int nbytes_tmp;
+    nbytes_tmp = write(s, &frame, sizeof(struct can_frame));
+    nbytes = nbytes_tmp;
+    return nbytes_tmp;
+}
+
+ssize_t CAN_VAL::read()
+{
+    int nbytes_tmp;
+    nbytes_tmp = read(s, &frame, sizeof(struct can_frame));
+    nbytes = nbytes_tmp;
+    return nbytes_tmp;
+}
 CAN_AVL::CAN_AVL(const char *dev_name_)
 {
     CAN_INIT(dev_name_);
