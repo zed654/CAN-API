@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.6)
 project(pcan_mac)
 
 include_directories(/usr/local/include)
+include_directories(include)
+
 link_directories(/usr/local/lib)
 link_libraries(/usr/local/lib/libPCBUSB.dylib)
 
