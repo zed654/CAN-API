@@ -25,3 +25,7 @@
             build $ cmake .. -G Xcode
             
             이후 생성된 {실행파일명}.xcodeproj 실행
+
+# can_mac_val.h
+
+            SocketCAN과 PeakCAN의 명령어를 동일하게 만든 라이브러리 함수.

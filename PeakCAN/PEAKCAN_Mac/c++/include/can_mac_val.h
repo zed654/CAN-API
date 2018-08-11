@@ -38,6 +38,8 @@ public:
     TPCANStatus status;
     TPCANHandle dev_name;
     SOCKETCAN_FRAME frame;
+    int fd;
+    fd_set fds;
     
     CAN_AVL(TPCANHandle dev_name_);
     void CAN_INIT(TPCANHandle dev_name_);
@@ -50,8 +52,22 @@ public:
 };
 void CAN_AVL::can_read()
 {
-    status = CAN_GetValue(dev_name, PCAN_RECEIVE_EVENT, NULL, sizeof(int));
-    status = CAN_Read(dev_name, &message, NULL);
+    // 입력 이벤트가 변할 때 만 출력하는 코드
+    status = CAN_GetValue(PCAN_CHANNEL, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
+    
+    FD_ZERO(&fds);
+    FD_SET(fd, &fds);
+    while(select(fd+1, &fds, NULL, NULL, NULL) > 0) break;
+    status = CAN_Read(PCAN_CHANNEL, &message, NULL);
+    
+    if (status != PCAN_ERROR_OK) {
+        printf("Error 0x%lx\n", status);
+    }
+    
+    // 입력 이벤트가 변하지 않아도 항상 출력하는 코드
+    //status = CAN_GetValue(dev_name, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
+    //status = CAN_Read(dev_name, &message, NULL);
+    
     PEAKCAN_TO_SOCKETCAN();
 }
 void CAN_AVL::can_write()
