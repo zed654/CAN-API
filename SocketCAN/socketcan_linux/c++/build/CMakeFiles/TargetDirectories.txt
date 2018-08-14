@@ -1,0 +1,4 @@
+/Users/macbookpro/ioniq/CAN_API/SocketCAN/socketcan_linux/c++/build/CMakeFiles/rebuild_cache.dir
+/Users/macbookpro/ioniq/CAN_API/SocketCAN/socketcan_linux/c++/build/CMakeFiles/edit_cache.dir
+/Users/macbookpro/ioniq/CAN_API/SocketCAN/socketcan_linux/c++/build/CMakeFiles/main_rx.dir
+/Users/macbookpro/ioniq/CAN_API/SocketCAN/socketcan_linux/c++/build/CMakeFiles/main_tx.dir

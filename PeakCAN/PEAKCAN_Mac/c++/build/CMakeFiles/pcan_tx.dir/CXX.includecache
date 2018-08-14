@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/can_mac_val.h
+stdio.h
+-
+unistd.h
+-
+string.h
+-
+asm/types.h
+-
+PCANBasic.h
+../include/PCANBasic.h
+PCBUSB.h
+../include/PCBUSB.h
+
+/Users/macbookpro/ioniq/CAN_API/PeakCAN/PEAKCAN_Mac/c++/src/pcbusb_send.cpp
+can_mac_val.h
+/Users/macbookpro/ioniq/CAN_API/PeakCAN/PEAKCAN_Mac/c++/src/can_mac_val.h
+
+/usr/local/include/PCBUSB.h
+
