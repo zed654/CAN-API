@@ -43,8 +43,8 @@ public:
     int fd;
     fd_set fds;
     
-    CAN_AVL(TPCANHandle dev_name_);
-    void CAN_INIT(TPCANHandle dev_name_);
+    CAN_AVL(TPCANHandle dev_name_, TPCANHandle dev_baud_rate_);
+    void CAN_INIT(TPCANHandle dev_name_, TPCANHandle dev_baud_rate_);
     void PEAKCAN_TO_SOCKETCAN();
     void SOCKETCAN_TO_PEAKCAN();
     void write_param(int id_, int dlc_);
@@ -55,14 +55,14 @@ public:
     void can_memset();
 };
 
-CAN_AVL::CAN_AVL(TPCANHandle dev_name_)
+CAN_AVL::CAN_AVL(TPCANHandle dev_name_, TPCANHandle dev_baud_rate_)
 {
-    CAN_INIT(dev_name_);
+    CAN_INIT(dev_name_, dev_baud_rate_);
 }
 
-void CAN_AVL::CAN_INIT(TPCANHandle dev_name_)
+void CAN_AVL::CAN_INIT(TPCANHandle dev_name_, TPCANHandle dev_baud_rate_)
 {
-    status = CAN_Initialize(dev_name_, PCAN_BAUDRATE, 0, 0, 0);
+    status = CAN_Initialize(dev_name_, dev_baud_rate_, 0, 0, 0);
     printf("Initialize CAN: 0x%lx\n", status);
     if(status != PCAN_ERROR_OK)
     {
@@ -78,20 +78,27 @@ void CAN_AVL::CAN_INIT(TPCANHandle dev_name_)
 void CAN_AVL::can_read()
 {
     // 입력 이벤트가 변할 때 만 출력하는 코드
-    status = CAN_GetValue(PCAN_CHANNEL, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
+    status = CAN_GetValue(dev_name, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
+    status = CAN_Read(dev_name, &message, NULL);
     
-    FD_ZERO(&fds);
-    FD_SET(fd, &fds);
-    while(select(fd+1, &fds, NULL, NULL, NULL) > 0) break;
-    status = CAN_Read(PCAN_CHANNEL, &message, NULL);
     
-    if (status != PCAN_ERROR_OK) {
-        printf("Read Error 0x%lx\n", status);
-    }
     
     // 입력 이벤트가 변하지 않아도 항상 출력하는 코드
-    //status = CAN_GetValue(dev_name, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
-    //status = CAN_Read(dev_name, &message, NULL);
+//    status = CAN_GetValue(dev_name, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
+//    status = CAN_Read(dev_name, &message, NULL);
+    
+    
+    
+    
+    // 입력 이벤트가 변할 때만 출력하는 코드. 아래 코드는 입력에 대한 딜레이가 존재. 해결 못했음.
+//    status = CAN_GetValue(dev_name, PCAN_RECEIVE_EVENT, &fd, sizeof(int));
+//    FD_ZERO(&fds);
+//    FD_SET(fd, &fds);
+//    while(select(fd+1, &fds, NULL, NULL, NULL) > 0) break;
+//    status = CAN_Read(dev_name, &message, NULL);
+//    if (status != PCAN_ERROR_OK) {
+//        printf("Read Error 0x%lx\n", status);
+//    }
     
     PEAKCAN_TO_SOCKETCAN(); // msg -> frame
 }
@@ -105,6 +112,11 @@ void CAN_AVL::can_write()
 //           (int) message.DATA[5], (int) message.DATA[6],
 //           (int) message.DATA[7]);
     status = CAN_Write(dev_name, &message);
+    
+    if (status != PCAN_ERROR_OK) {
+        printf("Write Error 0x%lx\n", status);
+    }
+    
     PEAKCAN_TO_SOCKETCAN(); // msg -> frame
 }
 void CAN_AVL::PEAKCAN_TO_SOCKETCAN()
