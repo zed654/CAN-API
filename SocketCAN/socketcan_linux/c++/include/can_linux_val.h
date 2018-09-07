@@ -58,6 +58,12 @@ CAN_AVL::CAN_AVL(const char *dev_name_)
     CAN_INIT(dev_name_);
 }
 
+// can_mac_val.h와 형식을 맞춰주기 위해 쓰레기값을 받는다.
+CAN_AVL::CAN_AVL(const char *dev_name_, int trash_val_)
+{
+    CAN_INIT(dev_name_);
+}
+
 void CAN_AVL::CAN_INIT(const char *dev_name_)
 {
     std::cout << " CAN_AVL class Constructor \t: opened" << std::endl;
