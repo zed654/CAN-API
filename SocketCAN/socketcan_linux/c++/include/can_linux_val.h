@@ -32,6 +32,7 @@ public:
     const char *ifname;
 
     CAN_AVL(const char *dev_name_);
+    CAN_AVL(const char *dev_name_, int trash_val_);
     void CAN_INIT(const char *dev_name_);
     void write_param(int id_, int dlc_);
     ssize_t can_write();
